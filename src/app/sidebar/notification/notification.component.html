@@ -1,0 +1,51 @@
+<div class="notification-container">
+  <div class="notification-box-container">
+    <p class="notification-heading pull-left">Network Invites</p>
+    <p class="no-notifications" *ngIf="network_notifications.length == 0">You have no new network invites.</p>
+  </div>
+
+  <div class="notification-box-container" *ngIf="network_notifications.length > 0">
+    <div class="network-notification-box" *ngFor="let network_notification of network_notifications;">
+      <a [href]="_decodeURIComponent(network_notification.action_link)" class="notification-link" target="_blank" *ngIf="network_notification.action_link != null">
+        <img [src]="network_notification.image_url" onerror="this.src='assets/images/svg/missing.svg'" class="avatar" />
+        <p class="notification-text" [innerHTML]="network_notification.message"></p>
+        <span class="network-notification-action" (click)="decline(network_notification)">Decline</span>
+        <span class="network-notification-action active" (click)="accept(network_notification)">Accept</span>
+        <div class="clearfix"></div>
+      </a>
+
+      <div *ngIf="network_notification.action_link == null">
+        <img [src]="network_notification.image_url" onerror="this.src='assets/images/svg/missing.svg'" class="avatar" />
+        <p class="notification-text" [innerHTML]="network_notification.message"></p>
+        <span class="network-notification-action" (click)="decline(network_notification)">Decline</span>
+        <span class="network-notification-action active" (click)="accept(network_notification)">Accept</span>
+        <div class="clearfix"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="notification-box-container notification-box-margin">
+    <p class="notification-heading pull-left">Notifications</p>
+    <p class="notification-heading pull-right dismiss-btn" (click)="dismissAll()">Dismiss all</p>
+    <p class="no-notifications" *ngIf="notifications.length == 0">You have no new notifications.</p>
+  </div>
+
+  <div class="notification-box-container" *ngIf="notifications.length > 0" >
+    <div class="notification-box" *ngFor="let notification of notifications;" [class.read]="notification.state">
+      <a [href]="_decodeURIComponent(notification.action_link)" class="notification-link" target="_blank" *ngIf="notification.action_link != null">
+        <img src='assets/images/svg/missing.svg' class="avatar" />
+        <p class="notification-text" [innerHTML]="notification.message"></p>
+        <span class="dismiss-notification" (click)="dismiss(notification.notification_id)" *ngIf="!notification.state">dismiss</span>
+        <div class="clearfix"></div>
+      </a>
+
+      <div *ngIf="notification.action_link == null">
+        <img src='assets/images/svg/missing.svg' class="avatar" />
+        <p class="notification-text" [innerHTML]="notification.message"></p>
+        <span class="dismiss-notification" (click)="dismiss(notification.notification_id)" *ngIf="!notification.state">dismiss</span>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+<div id="article-scroll-box">
+  <div class="article-box" *ngFor="let article of articles.feed">
+    <div class="row">
+      <a [href]="article.rdo_url" target="_blank">
+        <div class="article-tile-image-bx normalize-padding">
+
+          <img [src]="article.body_data.image_url" class="article-image"  onerror="this.src='assets/images/R-Logo-tile.jpg'"  *ngIf="article.body_data.image_url != ''" />
+
+          <img src="assets/images/R-Logo-tile.jpg" class="article-image" *ngIf="article.body_data.image_url == ''">
+
+          <a [href]="article.canonical_url" target="_blank" class="btn btn-primary btn-block active rdo-article-link">View Orignal</a>
+        </div>
+        <div class="col-md-7 col-sm-7 normalize-padding">
+          <h2 *ngIf="article.body_data.article_title == ''">Untitled</h2>
+          <h2 *ngIf="article.body_data.article_title != ''">{{ article.body_data.article_title.length > 34 ? article.body_data.article_title.substring(0, 34) + '...' : article.body_data.article_title }}</h2>
+          <p *ngIf="article.body_data.article_description.length == ''">No Content</p>
+          <p *ngIf="article.body_data.article_description.length != 'undefined'">{{ article.body_data.article_description }}</p>
+        </div>
+      </a>
+    </div>
+
+  </div>
+  <div class="article-loading" style="display: block;margin-left: auto;margin-right: auto;" *ngIf = "isLoadingUserArticles">
+    <img src="assets/images/svg/loader.svg" class="loader-article-img" style="display: block;margin-left: auto;margin-right: auto;width: 50px;">
+  </div>
+
+  <p class="loading-complete" *ngIf="is_end">Feed End</p>
+  <div class="clearfix"></div>
+</div>

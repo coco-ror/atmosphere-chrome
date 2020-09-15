@@ -1,0 +1,85 @@
+.notification-heading {
+	color: #b7b7b7;
+  font-size: 13px;
+  line-height: 12px;
+}
+.notification-container {
+	padding: 0 6px;
+}
+.no-notifications {
+	width: 100%;
+	float: left;
+	text-align: center;
+}
+.notification-box {
+	border: 1px solid #ececec;
+	padding: 8px 12px;
+	border-left: 4px solid #ffc5aa;
+	background-color: #fff;
+	box-shadow: -1px 1px 1px #DDD;
+	margin-bottom: 5px;
+	width: 100%;
+}
+.notification-box .avatar {
+	width: 50px;
+	float: left;
+}
+.notification-text {
+	width: 78%;
+	float: left;
+	font-size: 12px;
+	margin-left: 13px;
+}
+.dismiss-notification {
+	float: right;
+	font-size: 11px;
+	color: #b9b9b9;
+  cursor:pointer;
+}
+.network-notification-box {
+	border: 1px solid #ececec;
+	padding: 8px 12px;
+	background-color: #FDE6DE;
+	box-shadow: -1px 1px 1px #DDD;
+	margin-bottom: 5px;
+	border: 1px solid #b9b9b9;
+	width: 100%;
+	transition: all 0.4s;
+}
+.network-notification-box .avatar {
+	width: 50px;
+	float: left;
+}
+.network-notification-action {
+	float: right;
+  font-size: 11px;
+  margin-left: 5px;
+  color: #b9b9b9;
+  cursor:pointer;
+}
+
+.network-notification-box .active {
+	color: #009BDE !important;
+}
+.notification-box-margin {
+	margin-top: 10px;
+}
+.notification-box-container {
+	width:327px;
+	float: left;
+}
+.read {
+	background: #efefef !important;
+	border: 1px solid #b9b9b9!important;
+	transition: all 0.4s;
+}
+.dismiss-btn {
+	cursor: pointer;
+}
+.avatar {
+	border-radius: 50%;
+}
+.notification-link {
+	text-decoration: none;
+	color: #000;
+}

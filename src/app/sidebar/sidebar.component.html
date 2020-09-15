@@ -1,0 +1,262 @@
+<style type="text/css">
+input[type=checkbox] + span {
+  color: #ccc;
+} 
+input[type=checkbox]:checked + span {
+  color: #00a2de;
+} 
+</style>
+<!-- <button (click)="open()">Open</button> -->
+<div class="sidebar-wrapper" [class.sidebar-close]="!sidebar_open">
+  <div class="sidebar-head">
+    <ul class="sidebar-menu">
+      <li (click)="open_notification_tab()">
+        <img src="assets/images/svg/bell.svg" style="transform: rotate(30deg);" [class.hide]="is_notification_tab_open">
+        <span class="badge badge-sm badge-notification" *ngIf="_notification_service.getNotificationCount() != 0">{{ _notification_service.getNotificationCount() }}</span>
+        <img src="assets/images/svg/bell_blue.svg" style="transform: rotate(30deg);" [class.hide]="!is_notification_tab_open">
+        <p class="rdo-orange" [class.menu-active]="is_notification_tab_open">NOTIFICATIONS</p>
+      </li>
+      <li (click)="open_interact_tab()">
+        <img src="assets/images/svg/gantrail.svg" [class.hide]="is_interact_tab_open" class="interact-img">
+        <img src="assets/images/svg/gantrail_blue.svg" [class.hide]="!is_interact_tab_open" class="interact-img">
+        <p class="rdo-orange interact-title" [class.menu-active]="is_interact_tab_open">INTERACT</p>
+      </li>
+      <li (click)="open_explore_tab()">
+        <img src="assets/images/svg/shares_icon.svg" [class.hide]="is_explore_tab_open">
+        <img src="assets/images/svg/shares_icon_blue.svg" [class.hide]="!is_explore_tab_open">
+        <p class="rdo-orange" [class.menu-active]="is_explore_tab_open">EXPLORE</p>
+      </li>
+      <li (click)="hideSideBar()" class="close-sidebar-btn">
+        <img src="assets/images/svg/forward_orange_btn.svg" class="close-btn">
+      </li>
+    </ul>
+  </div>
+<!-- 
+  <div class="tab-panel-wrapper" [class.first-tab]="is_notification_tab_open" [class.second-tab]="is_interact_tab_open" [class.third-tab]="is_explore_tab_open"> -->
+  
+  <div class="tab-panel-wrapper" [class.first-tab]="is_notification_tab_open" [class.second-tab]="is_interact_tab_open || is_explore_tab_open" [class.third-tab]="is_explore_tab_open">
+    <!-- Notification tab starts here--> 
+    <div class="tab-panel notification-tab-container" [class.show]="is_notification_tab_open">
+      <div class="notification-wrapper">
+        <app-notification></app-notification>
+      </div>
+    </div>
+    <!-- Notification tab ends here--> 
+
+    <!-- Interact tab starts here--> 
+    <div class="tab-panel" [class.show]="is_interact_tab_open">
+      <div class="atmosphere-wrapper-v" [class.hide-atmosphere]="hide_atmosphere_wrapper" *ngIf="articleData != undefined">
+        <div class="atmoshere-drop-zone">
+          <div class="ul-slider-labels clearfix">
+            <div class="pull-left">Noise</div>
+            <div class="pull-right">Signal</div>
+          </div>
+          <app-mixer [(value)] = "articleData.rating" (valueChanged) = "rateChanged($event)"></app-mixer>
+          <div class="advanced-block-btns-group clearfix">
+            <div class="advanced-block-btn-item clearfix syndicate-btn-item">
+                <img class="pull-left voice-btn-img" src="assets/images/svg/share_icon_blk.svg">
+                <div class="pull-left"> 
+                  <span>{{ articleData.syndications_count }} SYNDICATES </span>
+                </div>
+            </div>
+            <div class="advanced-block-btn-item clearfix voice-btn-item">
+              <img class="pull-left" src="assets/images/svg/voices_icon_blk.svg">
+              <div class="pull-left">{{ articleData.voices_count }} VOICES</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="article-box">
+          <div class="row">
+            <!-- Main Page Information Begin -->
+            <div class=" normalize-padding default-loading-data" *ngIf="articleData.image_url == '' && !requestComplete">
+              <div class="article-image">
+                <img src="assets/images/logo_100.png" class="article-img">
+              </div>
+            </div>
+            <div class=" normalize-padding" *ngIf="articleData.image_url != '' || requestComplete">
+              <div class="article-image">
+                <img src="{{articleData.image_url}}" class="article-img">
+              </div>
+            </div>
+
+            <div class="normalize-padding default-loading-data" *ngIf="articleData.title == '' && !requestComplete">
+              <p style="margin-left: -29px;text-transform: uppercase;font-weight: bold;font-size: 13px;color: #000;">Title</p>
+              <img src="assets/images/svg/loader.svg" class="image-upload-loader" style="display: block;margin-left: 25px;width: 50px;">
+            </div>
+
+            <div class="normalize-padding" *ngIf="articleData.title != '' || requestComplete">
+              <h2 class = "origin-page-title" style="margin-left: 140px;margin-top: -122px;position: absolute;width: 183px;">{{ articleData.title.length > 34 ? articleData.title.substring(0, 34) + '...' : articleData.title }}</h2>
+              <p style="height: 22px;width: 183px;padding-left: 0px;margin-left: 140px;position: absolute;margin-top: -90px;">{{ articleData.description.length > 80 ? articleData.description.substring(0, 80) + '...' : articleData.description }}</p>
+            </div>
+            <!-- Main Page Information End -->
+          </div>
+        </div>
+
+        <input type="text" name="tags" class="tag-box" placeholder="{{ tag_placeholder_text }}" (click) = "showComment();" [(ngModel)]="tempTag"
+            [typeahead]="tag_source"
+            (typeaheadOnSelect)="tagSelected($event)"
+            [typeaheadOptionsLimit]="7"
+            [typeaheadOptionField]="'label'"
+            [typeaheadWaitMs] = "200"
+            (keydown)="checkTagInputKeyDown($event)"/>
+
+        <div class="tags-list">
+          <span class="tag-item" title="a" *ngFor= "let tag of articleData.tags;let i = index;">
+            {{tag}}
+            <span class="close tag-close" role="presentation" (click) = "removeTag(i)">×</span>
+          </span>
+        </div>
+
+        <div class="comment-box" *ngIf="is_shown_comment_tab">
+          <textarea name="comment" [(ngModel)]="comment" placeholder="Leave a comment"></textarea>
+        </div>
+        <div class="social-icon" *ngIf="articleData['current_user'] != undefined">
+
+          <button class="syndicate-btn" (click)="syndicate()" *ngIf="content_type == 0">
+            <span *ngIf="is_syndicating">SYNDICATING</span>
+            <span *ngIf="!is_syndicating">SYNDICATE</span>
+            <img *ngIf="is_syndicating" src="assets/images/loader_btn.svg" style="width: 24px;margin-top: -4px;">
+          </button>
+
+          <button class="save-btn" (click)="syndicate()" *ngIf="content_type == 1">
+            <span *ngIf="is_syndicating">SAVING</span>
+            <span *ngIf="!is_syndicating">SAVE</span>
+          </button>
+
+
+          <img src="assets/images/twiitter.png" class="fa fa-twitter twitter-icon" [class.social-unselected]="!is_twitter_selected" (click)="is_twitter_selected = !is_twitter_selected" *ngIf="articleData['current_user']['twitter_authorized']">
+
+          <img src="assets/images/facebook.png"  class="fa fa-facebook fb-icon" [class.social-unselected]="!is_facebook_selected" (click)="is_facebook_selected = !is_facebook_selected" *ngIf="articleData['current_user']['fb_authorized']">
+          
+        </div>
+        
+        <div class="select-box-div" >
+         <a class="article-type-dropdown" dropdownToggle style="color: #333" (click)="toggleDD()">
+            <i class="fa fa-chevron-down" style="color: #f06427"></i>
+            <span *ngIf="content_type == 1">PRIVATE</span>
+            <span *ngIf="content_type == 0">PUBLIC</span>
+          </a>
+          <ul class="dd_menu" [class.hidden]="!dd_open">
+            <li role="menuitem">
+              <a class="dropdown-item" (click)="content_type = 1; dd_open = false;">PRIVATE</a>
+            </li>
+            <li>
+              <a class="dropdown-item" (click)="content_type = 0; dd_open = false;">PUBLIC</a>
+            </li>
+            <div class="clearfix"></div>
+          </ul>
+        </div>
+
+
+        <div class="selected-network-container" *ngIf="content_type == 0">
+          <div class="network-btn" (click)="colapse_networks = !colapse_networks">
+            <p class="pull-left">Networks</p>
+            <i class="fa fa-chevron-up colapse-networks"  [class.close]="colapse_networks"></i>
+          </div>
+          <!-- <p class="pull-right">Approvals</p> -->
+          <div class="selected-network-list">
+            <!-- for submit process process -->
+            <ul *ngIf="user != undefined && !colapse_networks">
+              <li *ngFor = "let network of user.active_networks;">
+                <input type="checkbox" value="{{network.network_id}}" class="network-chkbx"  [checked]="checked_network[network.network_id]" (change)="onNetworkCheckBoxChange($event, network.network_id)"/>
+                <span class="network-chkbx-text">{{ network.name }}</span>
+              </li>
+            </ul>
+            <!-- 
+            <div class="approved-networks">
+              3/3
+            </div> -->
+          </div>
+        </div>
+        
+        <ul class="content-type" *ngIf="content_type == 0 && !colapse_networks">
+          <li (click)="changeArticleType(1)" [class.active]="is_article_internal">Internal</li>
+          <li (click)="changeArticleType(2)" [class.active]="is_article_members_only" style="width: 40%;">Members Only</li>
+          <li (click)="changeArticleType(3)" [class.active]="is_article_public">Public</li>
+        </ul>
+
+        <alert type="danger" *ngIf="_error" class="alert-danger-custom" dismissible="true">
+          {{ _error_message }}
+        </alert>
+
+        <!-- syndication comments starts -->
+        <div class="comment-box-wrapper" *ngIf="articleData.syndications != undefined && articleData.syndications.length != 0 && !articleData.no_data">
+          <div class="comments-view" *ngFor="let syndication of articleData.syndications; let i = index;">
+            <img [src]="syndication.syndication.author.image" class="comment-box-image" style="width: 36px;"  (click)="viewSyndicateComment(syndication, i)"/>
+            <div class="author-name" (click)="viewSyndicateComment(syndication, i)">{{ syndication.syndication.author.name }}</div>
+            <div class="author-comments" [innerHTML]="syndication.syndication.body" (click)="viewSyndicateComment(syndication, i)">Comments</div>
+            <div class="comment-reply-btn" (click)="replyToSyndicate(syndication, i)">Reply</div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <!-- syndication comments ends -->
+      </div>
+
+      <div class="syndication-box" [class.show-syndication-box]="hide_atmosphere_wrapper" *ngIf="!articleData.no_data">
+        <a class="syndication-back" (click)="syndicationBack()">Back</a>
+        <div class="syndication-nav">
+          <i class="fa fa-chevron-right nav-btn" (click)="nextComment()" style="color: #f06427"></i>
+          <i class="fa fa-chevron-left nav-btn" (click)="previousComment()" style="color: #f06427"></i>
+        </div>
+        
+        <!-- for main syndication comments -->
+        <div class="comment-box-wrapper">
+          <div class="comments-view" *ngIf="current_syndication.syndication != undefined">
+            <img [src]="current_syndication.syndication.author.image" class="comment-box-image" style="width: 36px;" />
+            <div class="author-name">{{ current_syndication.syndication.author.name }}</div>
+            <div class="author-comments" [innerHTML]="current_syndication.syndication.body">Comments</div>
+            <textarea class="comment-reply-txtbx" app-autofocus [show_focus]="syndication_comment_open" [(ngModel)]="parent_comment"></textarea>
+            <button class="btn comment-respond" [class.show]="syndication_comment_open" (click)="add_comment(current_syndication.syndication.id, current_syndication.syndication.comment_id, parent_comment, true)">Respond</button>
+            <div class="comment-reply-btn" [class.hide]="syndication_comment_open" (click)="openSyndicationCommentBox()">Reply</div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+
+        <!-- for child syndication comments -->
+        <div class="comment-box-wrapper child-1" *ngIf="current_syndication.comments != undefined && current_syndication.comments.length != 0">
+        <div *ngFor="let comment of current_syndication.comments; let i = index;">
+            <div class="comments-view">
+              <img [src]="comment.author.image" class="comment-box-image" style="width: 36px;" />
+              <div class="author-name">{{ comment.author.name }}</div>
+              <div class="author-comments" [innerHTML]="comment.comment_text">Comments</div>
+              
+              <textarea class="comment-reply-txtbx" app-autofocus [show_focus]="isFirstChildRespondBoxOpen(comment.id)" [(ngModel)]="child_1_comment"></textarea>
+              <button class="btn comment-respond" [class.show]="isFirstChildRespondBoxOpen(comment.id)" (click)="add_comment(current_syndication.syndication.id, comment.id, child_1_comment, true)">Respond</button>
+
+              <div class="comment-reply-btn" (click)="showFirstChildBox(comment.id)" [class.hide]="isFirstChildRespondBoxOpen(comment.id)">Reply</div>
+              <div class="clearfix"></div>
+            </div>
+
+            <div class="comment-box-wrapper child-2" *ngIf="comment.replies != undefined && comment.replies.length != 0">
+              <div class="comments-view" [class.depth-3]="reply.depth >= 3" *ngFor="let reply of comment.replies; let i = index;">
+                <img [src]="reply.author.image" class="comment-box-image" style="width: 36px;"  (click)="viewSyndicateComment()"/>
+                <div class="author-name" (click)="viewSyndicateComment()">{{ reply.author.name }}</div>
+                <div class="author-comments" [innerHTML]="reply.comment_text">Comments</div>
+
+                <textarea class="comment-reply-txtbx" app-autofocus [show_focus]="isSecondChildRespondBoxOpen(reply.id)" [(ngModel)]="child_2_comment"></textarea>
+                <button class="btn comment-respond" [class.show]="isSecondChildRespondBoxOpen(reply.id)" (click)="add_comment(current_syndication.syndication.id, reply.id, child_2_comment, true)">Respond</button>
+
+                <div class="comment-reply-btn" [class.hide]="isSecondChildRespondBoxOpen(reply.id)" (click)="replyChild2(reply.id)">Reply</div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="clearfix"></div>
+      </div>
+
+
+
+    </div>
+    <!-- Interact tab ends here--> 
+
+    <!-- Explore tab starts here--> 
+    <div class="tab-panel article-tab-container" [class.show]="is_explore_tab_open">
+      <app-explore></app-explore>
+    </div>
+    <!-- Explore tab ends here--> 
+  </div>
+</div>

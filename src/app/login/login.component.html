@@ -1,0 +1,32 @@
+<div class="login-template-wrapper" *ngIf="!authService.isValidating()">
+  <h1 class="atmosphere-header">
+    Atmosphere
+  </h1>
+  <button aria-label="Close" class="close close-atmosphere" type="button" (click)="hideSideBar()">
+    <span aria-hidden="true">×</span>
+  </button>
+  <div class="">
+    <form class="form-horizontal" role="form" novalidate style="display: block;"  novalidate (ngSubmit) = "signin(signinForm);" #signinForm="ngForm">
+      <fieldset>
+        <div class="form-group">
+          <input class="form-control input-box" required="required" type="email" name="email"  required="true" placeholder="EMAIL ADDRESS" [(ngModel)]="model.email" [class.error]="is_error_email">
+        </div>
+        <div class="form-group">
+          <input class="form-control input-box" required="required" type="password" name="password"  required="true" placeholder="PASSWORD" [(ngModel)]="model.password" [class.error]="is_error_password">
+        </div>
+    <!--    <div class="alert alert-danger " >
+          <button aria-label="Close" class="close" type="button" >
+            <span aria-hidden="true">×</span>
+          </button>
+          <p></p>
+        </div> -->
+        
+        <a type="button" class="btn btn-primary pull-left register-btn" href="{{SERVER_URL}}/users/sign_up" target="_blank">REGISTER</a>
+        <button type="submit" class="btn btn-primary pull-right register-btn sign-in-btn" data-style="zoom-out">SIGN IN</button>
+      </fieldset>
+    </form>
+  </div>
+</div>
+<div class="indexLoader validating-wrapper" *ngIf="authService.isValidating()">
+  <img src="assets/images/loader.gif" style="margin: auto; width: 70px;" alt="loader">
+</div>

@@ -1,0 +1,83 @@
+.atmosphere-header { 
+  color: #767676;
+  text-align: center;
+  text-decoration: none;
+  font-style: normal;
+  width: 100%;
+  font-size: 22px;
+  background: #EDEDED;
+  font-weight: bold;
+  padding-bottom: 20px;
+  margin-top: 0px;
+}
+.register-btn {
+  border: 0 none;
+  background-color: #f06427;
+  border-color: #f06427;
+  border-radius: 0;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 12px;
+  padding-right: 12px;
+  letter-spacing: 1px;
+  font-size: 16px;
+}
+
+.register-btn:hover {
+  border: 0 none;
+  background-color: #00a2de;
+  border-radius: 0;
+}
+.sign-in-btn {
+  border: 0 none;
+  background-color: #00a2de;
+  border-color: #00a2de;
+  border-radius: 0;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 14px;
+  padding-right: 14px;
+  letter-spacing: 1px;
+  font-size: 16px;
+  margin-right: -6px;
+}
+.sign-in-btn:hover {
+  border: 0 none;
+  background-color: #025aa5;
+  border-color: #01549b;
+  border-radius: 0;
+}
+.input-box {
+  border: none;
+  border-top: solid 1px #D8D8D8;
+  background: none;
+  box-shadow: none;
+  padding-left: 0;
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+  transition: all ease 0.3s;
+}
+.error.input-box {
+  border-top: solid 1px #ff0000;
+}
+.error.input-box::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: rgba(255, 0, 0, 0.5);
+}
+.error.input-box::-moz-placeholder { /* Firefox 19+ */
+  color: rgba(255, 0, 0, 0.5);
+}
+.error.input-box:-ms-input-placeholder { /* IE 10+ */
+  color: rgba(255, 0, 0, 0.5);
+}
+.error.input-box:-moz-placeholder { /* Firefox 18- */
+  color: rgba(255, 0, 0, 0.5);
+}
+
+.validating-wrapper{
+  width: 340px; 
+  height: 100vh; 
+  float: left;
+  display: flex; 
+  background: #f1f1f1; 
+  position: fixed;
+}
